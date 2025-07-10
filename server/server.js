@@ -18,6 +18,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -27,6 +28,11 @@ if (!fs.existsSync(uploadsDir)) {
 app.get('/', (req, res) => {
   res.send('api working')
 })
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'))
+})
+
 app.use('/uploads', express.static('uploads'));
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
